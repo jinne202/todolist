@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, memo} from 'react';
+import {TodoLength, TodoList, TodoInput} from './Component';
 
-function App() {
+
+const dummy = [
+  {
+    todoItem : '장보기',
+    finish : false
+  },
+  {
+    todoItem : '일기쓰기',
+    finish : false
+  }
+]
+
+const App = memo(() => {
+  const [data, setData] = useState(dummy);
+  const todoAdd = (todoItem) => {
+
+    let resetData = data;
+    resetData.push({todoItem, finish : false});
+    setData(resetData);
+    console.log(resetData);
+    //위의 세 줄과 처리 과정이 같다 setData([...data, todoItem, finish : false])
+  }
+
+  const todoRemove = (todoIndex) => {
+    let resultData = data.filter((data, index) => {
+      return index !== todoIndex
+    });
+    setData(resultData);
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <TodoLength/>
+      <TodoList data={data} todoRemove={todoRemove}/>
+      <TodoInput todoAdd={todoAdd}/>
+    </>
   );
-}
+})
 
 export default App;
