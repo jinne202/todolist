@@ -16,12 +16,7 @@ const dummy = [
 const App = memo(() => {
   const [data, setData] = useState(dummy);
   const todoAdd = (todoItem) => {
-
-    let resetData = data;
-    resetData.push({todoItem, finish : false});
-    setData(resetData);
-    console.log(resetData);
-    //위의 세 줄과 처리 과정이 같다 setData([...data, todoItem, finish : false])
+    setData([...data, {todoItem, finish : false}]);
   }
 
   const todoRemove = (todoIndex) => {
@@ -31,11 +26,18 @@ const App = memo(() => {
     setData(resultData);
   }
 
+  const todoFinish = (todoIndex) => {
+    let resultData = [...data];
+    const currentFinish = resultData[todoIndex].finish;
+    resultData[todoIndex].finish = !currentFinish;
+    setData(resultData);
+  }
+
 
   return (
     <>
-      <TodoLength/>
-      <TodoList data={data} todoRemove={todoRemove}/>
+      <TodoLength data={data}/>
+      <TodoList data={data} todoRemove={todoRemove} todoFinish={todoFinish}/>
       <TodoInput todoAdd={todoAdd}/>
     </>
   );
